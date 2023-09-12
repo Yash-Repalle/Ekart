@@ -46,5 +46,12 @@ pipeline {
                 }
             }   
         }
+
+        stage("Sonar Qality Gates"){
+
+            steps{
+                waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube'
+            }
+        }
     }
 }
