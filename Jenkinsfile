@@ -53,5 +53,23 @@ pipeline {
                 waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube'
             }
         }
+
+        stage("MVN Build"){
+
+            steps{
+                sh 'mvn clean install'
+            }
+        }
+
+        stage("Docker Image Build"){
+            steps{
+                
+
+                sh '''
+                    docker image build -t yaswanth345/ecart .
+                    docker image tag yaswanth345.ecart:v1
+                '''
+            }
+        }
     }
 }
