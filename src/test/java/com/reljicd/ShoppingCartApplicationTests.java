@@ -11,7 +11,7 @@ public class ShoppingCartApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		system.out.printl("welcome");
+		system.out.println("welcome");
 	}
 
 }
