@@ -37,5 +37,13 @@ pipeline {
                 sh 'mvn verify -DskipUnitTests'
             }
         }
+
+        stage('Sonar Qube Code Analysis'){
+            when{ expression { params.action == 'create'}}
+            steps{
+                withSonarQubeEnv('sonarqube') {
+                sh 'mvn clean package sonar:sonar'
+            }
+        }
     }
 }
