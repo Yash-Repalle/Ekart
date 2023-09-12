@@ -31,5 +31,11 @@ pipeline {
             }
         }
         
+        stage('INTIGRATION TEST'){
+            when{ expression { params.action == 'create'}}
+            steps{
+                sh 'mvn verify -DskipUnitTests'
+            }
+        }
     }
 }
