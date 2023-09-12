@@ -43,7 +43,8 @@ pipeline {
             steps{
                 withSonarQubeEnv('sonarqube') {
                 sh 'mvn clean package sonar:sonar'
-            }
+                }
+            }   
         }
     }
 }
