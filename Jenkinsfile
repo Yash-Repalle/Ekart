@@ -105,7 +105,9 @@ pipeline {
             when{ expression { params.action == 'destroy'}}
            steps{  
                 //sh "docker stop yaswanth345/ecart:v1"
-                sh "docker rmi -f yaswanth345/ecart:latest"
+                sh "docker stop ecart"
+                sh "docker rm ecart"
+                sh "docker rmi yaswanth345/ecart:latest"
             }
         }
     }
