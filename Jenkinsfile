@@ -104,7 +104,7 @@ pipeline {
         stage("Docker Container clean up"){
             when{ expression { params.action == 'destroy'}}
            steps{  
-                sh "docker stop yaswanth345/ecart:v1"
+                //sh "docker stop yaswanth345/ecart:v1"
                 sh "docker rmi -f yaswanth345/ecart:v1"
             }
         }
