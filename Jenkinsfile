@@ -66,7 +66,7 @@ pipeline {
             steps{
                 sh '''
                     docker image build -t yaswanth345/ecart .
-                    docker image tag yaswanth345/ecart yaswanth345/ecart:v1
+                    docker image tag yaswanth345/ecart yaswanth345/ecart:latest
                 '''
             }
         }
@@ -75,7 +75,7 @@ pipeline {
             when{ expression { params.action == 'create'}}
             steps{
                 sh '''
-                    trivy image yaswanth345/ecart:v1 > scan.txt
+                    trivy image yaswanth345/ecart:latest > scan.txt
                     cat scan.txt
                 '''
             }
@@ -87,7 +87,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'pass', usernameVariable: 'username')]) {
                     sh "docker login -u '$username' -p '$pass'"
                 }
-                sh "docker image push yaswanth345/ecart:v1"
+                sh "docker image push yaswanth345/ecart:latest"
             }
         }
 
@@ -97,7 +97,7 @@ pipeline {
                 // withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'pass', usernameVariable: 'username')]) {
                 //     sh "docker login -u '$username' -p '$pass'"
                 // }   
-                sh "docker run -d --name ecart -p 8070:8070 yaswanth345/ecart:v1"
+                sh "docker run -d --name ecart -p 8070:8070 yaswanth345/ecart:latest"
             }
         }
 
@@ -105,7 +105,7 @@ pipeline {
             when{ expression { params.action == 'destroy'}}
            steps{  
                 //sh "docker stop yaswanth345/ecart:v1"
-                sh "docker rmi -f yaswanth345/ecart:v1"
+                sh "docker rmi -f yaswanth345/ecart:latest"
             }
         }
     }
