@@ -63,12 +63,38 @@ pipeline {
 
         stage("Docker Image Build"){
             steps{
-
-
                 sh '''
                     docker image build -t yaswanth345/ecart .
-                    docker image tag yaswanth345/ecart:v1
+                    docker image tag yaswanth345/ecart yaswanth345/ecart:v1
                 '''
+            }
+        }
+
+        stage("Docker Image Scan : Trivy"){
+
+            steps{
+                sh '''
+                    trivy image yaswanth345/ecart:v1 > scan.txt
+                    cat scan.txt
+                '''
+            }
+        }
+
+         stage("Docker Image Push"){
+           steps{
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'pass', usernameVariable: 'username')]) {
+                    sh "docker login -u '$username' -p '$pass'"
+                }
+                sh "docker image push yaswanth345/ecart:v1"
+            }
+        }
+
+        stage("Deploy as Container"){
+           steps{
+                // withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'pass', usernameVariable: 'username')]) {
+                //     sh "docker login -u '$username' -p '$pass'"
+                // }   
+                sh "docker run -d --name ecart -p 8070:8070 yaswanth345/ecart:v1"
             }
         }
     }
