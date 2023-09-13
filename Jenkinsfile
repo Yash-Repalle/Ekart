@@ -41,7 +41,7 @@ pipeline {
         stage('Sonar Qube Code Analysis'){
             when{ expression { params.action == 'create'}}
             steps{
-                withSonarQubeEnv('sonarqube') {
+                withSonarQubeEnv('sonar') {
                 sh 'mvn clean package sonar:sonar'
                 }
             }   
@@ -50,7 +50,7 @@ pipeline {
         stage("Sonar Qality Gates"){
 
             steps{
-                waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube'
+                waitForQualityGate abortPipeline: false, credentialsId: 'sonar'
             }
         }
 
