@@ -48,20 +48,21 @@ pipeline {
         }
 
         stage("Sonar Qality Gates"){
-
+            when{ expression { params.action == 'create'}}
             steps{
                 waitForQualityGate abortPipeline: false, credentialsId: 'sonar'
             }
         }
 
         stage("MVN Build"){
-
+            when{ expression { params.action == 'create'}}
             steps{
                 sh 'mvn clean install'
             }
         }
 
         stage("Docker Image Build"){
+            when{ expression { params.action == 'create'}}
             steps{
                 sh '''
                     docker image build -t yaswanth345/ecart .
@@ -71,7 +72,7 @@ pipeline {
         }
 
         stage("Docker Image Scan : Trivy"){
-
+            when{ expression { params.action == 'create'}}
             steps{
                 sh '''
                     trivy image yaswanth345/ecart:v1 > scan.txt
@@ -81,6 +82,7 @@ pipeline {
         }
 
          stage("Docker Image Push"){
+            when{ expression { params.action == 'create'}}
            steps{
                 withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'pass', usernameVariable: 'username')]) {
                     sh "docker login -u '$username' -p '$pass'"
@@ -90,6 +92,7 @@ pipeline {
         }
 
         stage("Deploy as Container"){
+            when{ expression { params.action == 'create'}}
            steps{
                 // withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'pass', usernameVariable: 'username')]) {
                 //     sh "docker login -u '$username' -p '$pass'"
